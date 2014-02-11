@@ -129,8 +129,8 @@ static void * AFHTTPRequestOperationStartDate = &AFHTTPRequestOperationStartDate
     } else {
         switch (self.level) {
             case AFLoggerLevelDebug:
-                DDLogVerbose(@"%ld '%@' [%.04f s]: %@ %@", (long)[operation.response statusCode], [[operation.response URL] absoluteString], elapsedTime, [operation.response allHeaderFields], operation.responseString);
-                break;
+                // DDLogVerbose(@"%ld '%@' [%.04f s]: %@ %@", (long)[operation.response statusCode], [[operation.response URL] absoluteString], elapsedTime, [operation.response allHeaderFields], operation.responseString);
+                // break;
             case AFLoggerLevelInfo:
                 DDLogInfo(@"%ld '%@' [%.04f s]", (long)[operation.response statusCode], [[operation.response URL] absoluteString], elapsedTime);
                 break;
