@@ -42,6 +42,8 @@ typedef NS_ENUM(NSUInteger, AFHTTPRequestLoggerLevel) {
  */
 @interface AFHTTPRequestOperationLogger : NSObject
 
+- (id)initWithDDLogLevel:(int) ddLogLevel;
+
 /**
  The level of logging detail. See "Logging Levels" for possible values. `AFLoggerLevelInfo` by default.
  */
@@ -55,7 +57,7 @@ typedef NS_ENUM(NSUInteger, AFHTTPRequestLoggerLevel) {
 /**
  Returns the shared logger instance.
  */
-+ (instancetype)sharedLogger;
++ (instancetype)sharedLoggerWithDDLogLevel:(int) logLevel;
 
 /**
  Start logging requests and responses.

@@ -22,29 +22,34 @@
 
 #import "AFHTTPRequestOperationLogger.h"
 #import "AFHTTPRequestOperation.h"
+#import "DDLog.h"
 
 #import <objc/runtime.h>
 
+int ddLogLevel;
+
 @implementation AFHTTPRequestOperationLogger
 
-+ (instancetype)sharedLogger {
++ (instancetype)sharedLoggerWithDDLogLevel:(int) logLevel {
     static AFHTTPRequestOperationLogger *_sharedLogger = nil;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedLogger = [[self alloc] init];
+        _sharedLogger = [[self alloc] initWithDDLogLevel:logLevel];
     });
     
     return _sharedLogger;
 }
 
-- (id)init {
+- (id)initWithDDLogLevel:(int) logLevel {
     self = [super init];
     if (!self) {
         return nil;
     }
     
-    self.level = AFLoggerLevelInfo;
+    ddLogLevel = logLevel;
+    
+    self.level = AFLoggerLevelWarn;
     
     return self;
 }
@@ -88,10 +93,10 @@ static void * AFHTTPRequestOperationStartDate = &AFHTTPRequestOperationStartDate
     
     switch (self.level) {
         case AFLoggerLevelDebug:
-            NSLog(@"%@ '%@': %@ %@", [operation.request HTTPMethod], [[operation.request URL] absoluteString], [operation.request allHTTPHeaderFields], body);
+            DDLogVerbose(@"%@ '%@': %@ %@", [operation.request HTTPMethod], [[operation.request URL] absoluteString], [operation.request allHTTPHeaderFields], body);
             break;
         case AFLoggerLevelInfo:
-            NSLog(@"%@ '%@'", [operation.request HTTPMethod], [[operation.request URL] absoluteString]);
+            DDLogInfo(@"%@ '%@'", [operation.request HTTPMethod], [[operation.request URL] absoluteString]);
             break;
         default:
             break;
@@ -117,17 +122,17 @@ static void * AFHTTPRequestOperationStartDate = &AFHTTPRequestOperationStartDate
             case AFLoggerLevelInfo:
             case AFLoggerLevelWarn:
             case AFLoggerLevelError:
-                NSLog(@"[Error] %@ '%@' (%ld) [%.04f s]: %@", [operation.request HTTPMethod], [[operation.response URL] absoluteString], (long)[operation.response statusCode], elapsedTime, operation.error);
+                DDLogError(@"[Error] %@ '%@' (%ld) [%.04f s]: %@", [operation.request HTTPMethod], [[operation.response URL] absoluteString], (long)[operation.response statusCode], elapsedTime, operation.error);
             default:
                 break;
         }
     } else {
         switch (self.level) {
             case AFLoggerLevelDebug:
-                NSLog(@"%ld '%@' [%.04f s]: %@ %@", (long)[operation.response statusCode], [[operation.response URL] absoluteString], elapsedTime, [operation.response allHeaderFields], operation.responseString);
+                DDLogVerbose(@"%ld '%@' [%.04f s]: %@ %@", (long)[operation.response statusCode], [[operation.response URL] absoluteString], elapsedTime, [operation.response allHeaderFields], operation.responseString);
                 break;
             case AFLoggerLevelInfo:
-                NSLog(@"%ld '%@' [%.04f s]", (long)[operation.response statusCode], [[operation.response URL] absoluteString], elapsedTime);
+                DDLogInfo(@"%ld '%@' [%.04f s]", (long)[operation.response statusCode], [[operation.response URL] absoluteString], elapsedTime);
                 break;
             default:
                 break;
