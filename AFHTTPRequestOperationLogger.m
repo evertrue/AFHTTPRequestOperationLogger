@@ -122,7 +122,7 @@ static void * AFHTTPRequestOperationStartDate = &AFHTTPRequestOperationStartDate
             case AFLoggerLevelInfo:
             case AFLoggerLevelWarn:
             case AFLoggerLevelError:
-                DDLogError(@"[Error] %@ '%@' (%ld) [%.04f s]: %@", [operation.request HTTPMethod], [[operation.response URL] absoluteString], (long)[operation.response statusCode], elapsedTime, operation.error);
+                DDLogError(@"[Error] %@ '%@' (%ld) [%.04f s]", [operation.request HTTPMethod], [[operation.response URL] absoluteString], (long)[operation.response statusCode], elapsedTime);
             default:
                 break;
         }
